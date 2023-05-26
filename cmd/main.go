@@ -18,7 +18,10 @@ type HelloWorld struct {
 
 func readFirstRecord(db *gorm.DB) HelloWorld {
 	var helloWorld HelloWorld
-	db.First(&helloWorld)
+	err := db.First(&helloWorld).Error
+	if err != nil {
+		fmt.Println(err)
+	}
 	return helloWorld
 }
 
@@ -37,7 +40,7 @@ func main() {
 
 	router.GET("/hello-world", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"message": s,
+			"message": string(s),
 		})
 	})
 
