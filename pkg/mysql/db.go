@@ -7,9 +7,9 @@ import (
 
 // TODO put db config in separate config file
 const DB_USERNAME = "landd"
-const DB_PASSWORD = "7Wx#1e8c@L9q"
+const DB_PASSWORD = ""
 const DB_NAME = "landd"
-const DB_HOST = "47.245.96.254"
+const DB_HOST = ""
 const DB_PORT = "3306"
 
 var db *gorm.DB
