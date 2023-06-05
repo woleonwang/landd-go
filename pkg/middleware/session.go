@@ -23,14 +23,14 @@ func AuthRequired(c *gin.Context) {
 }
 
 // GetUser returns current user in session
-func GetUser(c *gin.Context) *mysql.User {
+func GetUser(c *gin.Context) mysql.User {
 	session := sessions.Default(c)
 	user := session.Get(userKey)
-	return user.(*mysql.User)
+	return user.(mysql.User)
 }
 
 // SetUser sets current user into session
-func SetUser(c *gin.Context, user *mysql.User) error {
+func SetUser(c *gin.Context, user mysql.User) error {
 	session := sessions.Default(c)
 	session.Set(userKey, user)
 	if err := session.Save(); err != nil {

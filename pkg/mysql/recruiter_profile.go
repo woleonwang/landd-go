@@ -33,10 +33,13 @@ func GetRecruiterProfile(userID int64) (*RecruiterProfile, error) {
 	return &profile, nil
 }
 
-func SaveRecruiterProfile(profile *RecruiterProfile) error {
-	err := GetDB().Save(profile).Error
-	if err != nil {
-		return err
+func UpdateRecruiterProfile(userID int64, updates *RecruiterProfile) error {
+	res := GetDB().Model(&RecruiterProfile{}).Where("user_id = ?", userID).Updates(updates)
+	if res.Error != nil {
+		return res.Error
+	}
+	if res.RowsAffected == 0 {
+		return GetDB().Create(updates).Error
 	}
 	return nil
 }

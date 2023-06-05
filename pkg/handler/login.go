@@ -79,7 +79,7 @@ func (h *LoginHandler) SignUp(c *gin.Context) {
 		h.genErrResponse(c, model.ErrCodeMysqlError)
 		return
 	}
-	if err := middleware.SetUser(c, user); err != nil {
+	if err := middleware.SetUser(c, *user); err != nil {
 		log.Errorf("middleware.SetUser error: %v ", err)
 		h.genErrResponse(c, model.ErrCodeSessionError)
 		return
@@ -125,7 +125,7 @@ func (h *LoginHandler) Login(c *gin.Context) {
 		h.genErrResponse(c, model.ErrCodeIncorrectCredential)
 		return
 	}
-	if err := middleware.SetUser(c, user); err != nil {
+	if err := middleware.SetUser(c, *user); err != nil {
 		log.Errorf("middleware.SetUser error: %v ", err)
 		h.genErrResponse(c, model.ErrCodeSessionError)
 		return
