@@ -2,13 +2,14 @@ package middleware
 
 import (
 	"errors"
+	"landd.co/landd/pkg/mysql"
 	"net/http"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
-const userKey = "user_id"
+const userKey = "user"
 
 // AuthRequired is a simple middleware to check the session.
 func AuthRequired(c *gin.Context) {
@@ -21,17 +22,17 @@ func AuthRequired(c *gin.Context) {
 	c.Next()
 }
 
-// GetUserID returns current user_id in session
-func GetUserID(c *gin.Context) int64 {
+// GetUser returns current user in session
+func GetUser(c *gin.Context) *mysql.User {
 	session := sessions.Default(c)
 	user := session.Get(userKey)
-	return user.(int64)
+	return user.(*mysql.User)
 }
 
-// SetUserID sets current user into session
-func SetUserID(c *gin.Context, userID int64) error {
+// SetUser sets current user into session
+func SetUser(c *gin.Context, user *mysql.User) error {
 	session := sessions.Default(c)
-	session.Set(userKey, userID)
+	session.Set(userKey, user)
 	if err := session.Save(); err != nil {
 		return err
 	}

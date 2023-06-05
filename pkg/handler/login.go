@@ -41,6 +41,7 @@ func (h *LoginHandler) SignUp(c *gin.Context) {
 	log.Infof("signing up .. does email check only: %v, email: %v", req.IsEmailCheck, req.Email)
 	_, mysqlErr := mysql.GetUserByEmail(req.Email)
 	if mysqlErr == nil {
+		log.Errorf("GetUserByEmail error: %v ", mysqlErr)
 		h.genErrResponse(c, model.ErrCodeDuplicateEmail)
 		return
 	}
@@ -60,6 +61,7 @@ func (h *LoginHandler) SignUp(c *gin.Context) {
 	}
 	userID, createErr := mysql.CreateUser(user)
 	if createErr != nil {
+		log.Errorf("CreateUser error: %v ", createErr)
 		h.genErrResponse(c, model.ErrCodeMysqlError)
 		return
 	}
@@ -73,10 +75,12 @@ func (h *LoginHandler) SignUp(c *gin.Context) {
 		contacts = append(contacts, userContact)
 	}
 	if err := mysql.CreateUserContact(contacts); err != nil {
+		log.Errorf("CreateUserContact error: %v ", err)
 		h.genErrResponse(c, model.ErrCodeMysqlError)
 		return
 	}
-	if err := middleware.SetUserID(c, userID); err != nil {
+	if err := middleware.SetUser(c, user); err != nil {
+		log.Errorf("middleware.SetUser error: %v ", err)
 		h.genErrResponse(c, model.ErrCodeSessionError)
 		return
 	}
@@ -121,7 +125,8 @@ func (h *LoginHandler) Login(c *gin.Context) {
 		h.genErrResponse(c, model.ErrCodeIncorrectCredential)
 		return
 	}
-	if err := middleware.SetUserID(c, user.UserID); err != nil {
+	if err := middleware.SetUser(c, user); err != nil {
+		log.Errorf("middleware.SetUser error: %v ", err)
 		h.genErrResponse(c, model.ErrCodeSessionError)
 		return
 	}

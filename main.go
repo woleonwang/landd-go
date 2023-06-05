@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"github.com/gin-contrib/logger"
 	"github.com/gin-contrib/requestid"
 	"github.com/gin-contrib/sessions"
@@ -18,6 +19,7 @@ func main() {
 
 	router := gin.Default()
 	router.Use(requestid.New()).Use(logger.SetLogger()) // TODO add request id into log output for easy debugging
+	gob.Register(mysql.User{})
 	router.Use(sessions.Sessions("session", cookie.NewStore([]byte("coePCZ7yNeBtWyWtCTbTw6ZOszyL3nYf"))))
 
 	registerRoutes(router)
@@ -29,4 +31,21 @@ func registerRoutes(router *gin.Engine) {
 	router.POST("/sign_up", loginHandler.SignUp)
 	router.POST("/login", loginHandler.Login)
 	router.Use(middleware.AuthRequired).GET("/logout", loginHandler.Logout)
+
+	recruiterRoutes := router.Group("/recruiter")
+	{
+		profileRoutes := recruiterRoutes.Group("/profile")
+		{
+			recruiterHandler := handler.NewRecruiterProfileHandler()
+			profileRoutes.Use(middleware.AuthRequired).GET("/info", recruiterHandler.GetProfileInfo)
+			profileRoutes.Use(middleware.AuthRequired).POST("/info", recruiterHandler.UpdateProfileInfo)
+			profileRoutes.Use(middleware.AuthRequired).POST("/photo", recruiterHandler.UploadPhoto)
+		}
+		placementRoutes := recruiterRoutes.Group("/placement")
+		{
+			placementHandler := handler.NewRecruiterPlacementHandler()
+			placementRoutes.Use(middleware.AuthRequired).GET("/", placementHandler.GetPlacements)
+			placementRoutes.Use(middleware.AuthRequired).POST("/", placementHandler.UpdatePlacements)
+		}
+	}
 }

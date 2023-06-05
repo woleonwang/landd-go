@@ -17,11 +17,15 @@ var (
 		HttpCode: http.StatusBadRequest}
 	ErrCodeIncorrectCredential = CustomError{Code: 4004, Message: "ErrCodeIncorrectCredential",
 		HttpCode: http.StatusBadRequest}
+	ErrCodeImageInvalid = CustomError{Code: 4005, Message: "ErrCodeImageInvalid",
+		HttpCode: http.StatusBadRequest}
 
 	ErrCodeUnknownServerError = CustomError{Code: 5000, Message: "ErrCodeUnknownServerError",
 		HttpCode: http.StatusInternalServerError}
 	ErrCodeMysqlError = CustomError{Code: 5001, Message: "ErrCodeMysqlError",
 		HttpCode: http.StatusInternalServerError}
 	ErrCodeSessionError = CustomError{Code: 5002, Message: "ErrCodeSessionError",
+		HttpCode: http.StatusInternalServerError}
+	ErrCodeImageUploadError = CustomError{Code: 5003, Message: "ErrCodeImageUploadError",
 		HttpCode: http.StatusInternalServerError}
 )
