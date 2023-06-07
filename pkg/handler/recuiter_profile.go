@@ -23,7 +23,7 @@ func NewRecruiterProfileHandler() *RecruiterProfileHandler {
 }
 
 func (h *RecruiterProfileHandler) GetProfileInfo(c *gin.Context) {
-	userIDStr := c.Param("id")
+	userIDStr := c.Param("user_id")
 	userID, err := strconv.ParseInt(userIDStr, 10, 64)
 	if err != nil {
 		log.Errorf("convert request param error: %v ", err)
