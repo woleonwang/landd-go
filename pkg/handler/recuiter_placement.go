@@ -89,17 +89,3 @@ func (h *RecruiterPlacementHandler) genErrResponse(c *gin.Context, err model.Cus
 	resp := BaseResponse{ErrCode: err.Code, Message: err.Message}
 	c.JSON(err.HttpCode, gin.H{"message": resp})
 }
-
-func (h *RecruiterPlacementHandler) validateUser(c *gin.Context) *model.CustomError {
-	userIDStr := c.Param("user_id")
-	userID, err := strconv.ParseInt(userIDStr, 10, 64)
-	if err != nil {
-		log.Errorf("convert request param error: %v ", err)
-		return &model.ErrCodeInvalidRequest
-	}
-	user := middleware.GetUser(c)
-	if user.UserID != userID {
-		return &model.ErrCodeRequestUserNotLogin
-	}
-	return nil
-}

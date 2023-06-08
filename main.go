@@ -48,5 +48,11 @@ func registerRoutes(router *gin.Engine) {
 			placementRoutes.Use(middleware.AuthRequired).GET("/:user_id", placementHandler.GetPlacements)
 			placementRoutes.Use(middleware.AuthRequired).POST("/", placementHandler.UpdatePlacements)
 		}
+		jobRoutes := recruiterRoutes.Group("/job")
+		{
+			jobHandler := handler.NewRecruiterJobHandler()
+			jobRoutes.Use(middleware.AuthRequired).GET("/:user_id", jobHandler.GetJobs)
+			jobRoutes.Use(middleware.AuthRequired).POST("/", jobHandler.UpdateJobs)
+		}
 	}
 }
