@@ -38,21 +38,9 @@ func registerRoutes(router *gin.Engine) {
 		profileRoutes := recruiterRoutes.Group("/profile")
 		{
 			recruiterHandler := handler.NewRecruiterProfileHandler()
-			profileRoutes.Use(middleware.AuthRequired).GET("/info/:user_id", recruiterHandler.GetProfileInfo)
-			profileRoutes.Use(middleware.AuthRequired).POST("/info", recruiterHandler.UpdateProfileInfo)
+			profileRoutes.Use(middleware.AuthRequired).GET("/:user_id", recruiterHandler.GetProfileInfo)
+			profileRoutes.Use(middleware.AuthRequired).POST("/", recruiterHandler.UpdateProfileInfo)
 			profileRoutes.Use(middleware.AuthRequired).POST("/photo", recruiterHandler.UploadPhoto)
-		}
-		placementRoutes := recruiterRoutes.Group("/placement")
-		{
-			placementHandler := handler.NewRecruiterPlacementHandler()
-			placementRoutes.Use(middleware.AuthRequired).GET("/:user_id", placementHandler.GetPlacements)
-			placementRoutes.Use(middleware.AuthRequired).POST("/", placementHandler.UpdatePlacements)
-		}
-		jobRoutes := recruiterRoutes.Group("/job")
-		{
-			jobHandler := handler.NewRecruiterJobHandler()
-			jobRoutes.Use(middleware.AuthRequired).GET("/:user_id", jobHandler.GetJobs)
-			jobRoutes.Use(middleware.AuthRequired).POST("/", jobHandler.UpdateJobs)
 		}
 	}
 }

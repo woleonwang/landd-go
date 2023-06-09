@@ -34,9 +34,11 @@ func SaveRecruiterPlacements(userID int64, placements []*RecruiterPlacement) err
 		log.Errorf("error deleting placements: %v ", err)
 		return err
 	}
-	if err := GetDB().Create(placements).Error; err != nil {
-		log.Errorf("error creating user placements: %v ", err)
-		return err
+	if len(placements) > 0 {
+		if err := GetDB().Create(placements).Error; err != nil {
+			log.Errorf("error creating user placements: %v ", err)
+			return err
+		}
 	}
 	return nil
 }

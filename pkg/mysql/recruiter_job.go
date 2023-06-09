@@ -33,9 +33,11 @@ func SaveRecruiterJobs(userID int64, jobs []*RecruiterJob) error {
 		log.Errorf("error deleting jobs: %v ", err)
 		return err
 	}
-	if err := GetDB().Create(jobs).Error; err != nil {
-		log.Errorf("error creating user jobs: %v ", err)
-		return err
+	if len(jobs) > 0 {
+		if err := GetDB().Create(jobs).Error; err != nil {
+			log.Errorf("error creating user jobs: %v ", err)
+			return err
+		}
 	}
 	return nil
 }

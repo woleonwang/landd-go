@@ -27,11 +27,6 @@ type SignUpRequest struct {
 	Contacts     map[model.ContactType]string `json:"contacts"`
 }
 
-type BaseResponse struct {
-	ErrCode int    `json:"err_code"` // error code, 0 if none
-	Message string `json:"message"`
-}
-
 func (h *LoginHandler) SignUp(c *gin.Context) {
 	var req SignUpRequest
 	if err := c.BindJSON(&req); err != nil {
