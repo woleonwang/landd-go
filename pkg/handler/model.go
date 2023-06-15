@@ -1,6 +1,9 @@
 package handler
 
-import "landd.co/landd/pkg/mysql"
+import (
+	"landd.co/landd/pkg/model"
+	"landd.co/landd/pkg/mysql"
+)
 
 type BaseResponse struct {
 	ErrCode int    `json:"err_code"` // error code, 0 if none
@@ -58,4 +61,18 @@ type CandidateChanges struct {
 type PublicationChanges struct {
 	Title string `json:"title"`
 	Link  string `json:"link"`
+}
+
+type GetEndorsementResponse struct {
+	UserID       int64                `json:"user_id"`
+	Endorsements []*mysql.Endorsement `json:"endorsements"`
+}
+
+type UpdateEndorseDraftRequest struct {
+	UserID   int64                  `json:"user_id"`
+	Endorser string                 `json:"endorser"`
+	Title    string                 `json:"title"`
+	Company  string                 `json:"company"`
+	Identity model.EndorserIdentity `json:"identity"`
+	Content  string                 `json:"content"`
 }

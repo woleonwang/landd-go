@@ -21,7 +21,9 @@ func main() {
 	router.Static("/image", "./images")
 	router.Use(requestid.New()).Use(logger.SetLogger()) // TODO add request id into log output for easy debugging
 	gob.Register(mysql.User{})
-	router.Use(sessions.Sessions("session", cookie.NewStore([]byte("coePCZ7yNeBtWyWtCTbTw6ZOszyL3nYf"))))
+	store := cookie.NewStore([]byte("coePCZ7yNeBtWyWtCTbTw6ZOszyL3nYf"))
+	store.Options(sessions.Options{MaxAge: 7200})
+	router.Use(sessions.Sessions("session", store))
 
 	registerRoutes(router)
 	router.Run(":8080")
@@ -41,6 +43,14 @@ func registerRoutes(router *gin.Engine) {
 			profileRoutes.Use(middleware.AuthRequired).GET("/:user_id", recruiterHandler.GetProfileInfo)
 			profileRoutes.Use(middleware.AuthRequired).POST("/", recruiterHandler.UpdateProfileInfo)
 			profileRoutes.Use(middleware.AuthRequired).POST("/photo", recruiterHandler.UploadPhoto)
+		}
+		endorseRoutes := recruiterRoutes.Group("/endorse")
+		{
+			endorseHandler := handler.NewEndorseHandler()
+			endorseRoutes.Use(middleware.AuthRequired).GET("/:user_id", endorseHandler.GetEndorsement)
+			endorseRoutes.Use(middleware.AuthRequired).POST("/", endorseHandler.UpdateEndorsement)
+			endorseRoutes.Use(middleware.AuthRequired).GET("/draft/:user_id", endorseHandler.GetDraft)
+			endorseRoutes.Use(middleware.AuthRequired).POST("/draft", endorseHandler.UpdateDraft)
 		}
 	}
 }
