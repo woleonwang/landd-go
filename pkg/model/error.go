@@ -21,6 +21,8 @@ var (
 		HttpCode: http.StatusBadRequest}
 	ErrCodeRequestUserNotLogin = CustomError{Code: 4006, Message: "ErrCodeRequestUserNotLogin",
 		HttpCode: http.StatusBadRequest}
+	ErrCodePageSizeInvalid = CustomError{Code: 4007, Message: "ErrCodePageSizeInvalid",
+		HttpCode: http.StatusBadRequest}
 
 	ErrCodeUnknownServerError = CustomError{Code: 5000, Message: "ErrCodeUnknownServerError",
 		HttpCode: http.StatusInternalServerError}
@@ -31,5 +33,7 @@ var (
 	ErrCodeImageUploadError = CustomError{Code: 5003, Message: "ErrCodeImageUploadError",
 		HttpCode: http.StatusInternalServerError}
 	ErrCodeProfileNotFound = CustomError{Code: 5004, Message: "ErrCodeProfileNotFound",
+		HttpCode: http.StatusInternalServerError}
+	ErrCodeUnsupportEndorseOp = CustomError{Code: 5005, Message: "ErrCodeUnsupportEndorseOp",
 		HttpCode: http.StatusInternalServerError}
 )

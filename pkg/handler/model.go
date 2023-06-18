@@ -63,6 +63,26 @@ type PublicationChanges struct {
 	Link  string `json:"link"`
 }
 
+type InviteEndorseResponse struct {
+	UserID   int64 `json:"user_id"`
+	InviteID int64 `json:"invite_id"`
+}
+
+type CreateEndorsementRequest struct {
+	UserID int64 `json:"user_id"`
+}
+
+type UpdateEndorsementRequest struct {
+	UserID   int64                   `json:"user_id"`
+	InviteID int64                   `json:"invite_id"`
+	Endorser string                  `json:"endorser"`
+	Title    string                  `json:"title"`
+	Company  string                  `json:"company"`
+	Identity model.EndorserIdentity  `json:"identity"`
+	Content  string                  `json:"content"`
+	Status   model.EndorsementStatus `json:"status"`
+}
+
 type GetEndorsementResponse struct {
 	UserID       int64                `json:"user_id"`
 	Endorsements []*mysql.Endorsement `json:"endorsements"`

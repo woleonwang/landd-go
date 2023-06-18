@@ -47,10 +47,11 @@ func registerRoutes(router *gin.Engine) {
 		endorseRoutes := recruiterRoutes.Group("/endorse")
 		{
 			endorseHandler := handler.NewEndorseHandler()
-			endorseRoutes.Use(middleware.AuthRequired).GET("/:user_id", endorseHandler.GetEndorsement)
-			endorseRoutes.Use(middleware.AuthRequired).POST("/", endorseHandler.UpdateEndorsement)
 			endorseRoutes.Use(middleware.AuthRequired).GET("/draft/:user_id", endorseHandler.GetDraft)
 			endorseRoutes.Use(middleware.AuthRequired).POST("/draft", endorseHandler.UpdateDraft)
+			endorseRoutes.Use(middleware.AuthRequired).GET("/:user_id", endorseHandler.Get)
+			endorseRoutes.Use(middleware.AuthRequired).GET("/:user_id/invite", endorseHandler.Invite)
+			endorseRoutes.Use(middleware.AuthRequired).POST("/", endorseHandler.Update)
 		}
 	}
 }

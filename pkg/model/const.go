@@ -12,10 +12,10 @@ const (
 type EndorsementStatus int
 
 const (
-	EndorsementStatusInvited  EndorsementStatus = 1
-	EndorsementStatusPending  EndorsementStatus = 2
-	EndorsementStatusApproved EndorsementStatus = 3
-	EndorsementStatusDeclined EndorsementStatus = 4
+	EndorsementStatusInvited   EndorsementStatus = 1
+	EndorsementStatusSubmitted EndorsementStatus = 2
+	EndorsementStatusApproved  EndorsementStatus = 3
+	EndorsementStatusDeclined  EndorsementStatus = 4
 )
 
 type EndorserIdentity int
