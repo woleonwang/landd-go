@@ -24,6 +24,7 @@ type SignUpRequest struct {
 	Password     string                       `json:"password"`
 	Name         string                       `json:"name"`
 	Job          string                       `json:"job"`
+	Role         model.UserRole               `json:"role"`
 	Contacts     map[model.ContactType]string `json:"contacts"`
 }
 
@@ -34,6 +35,11 @@ func (h *LoginHandler) SignUp(c *gin.Context) {
 		return
 	}
 	log.Infof("signing up .. does email check only: %v, email: %v", req.IsEmailCheck, req.Email)
+	if req.Role != model.Recruiter && req.Role != model.Partner {
+		log.Errorf("sign up as unrecognized role %v ", req.Role)
+		h.genErrResponse(c, model.ErrCodeInvalidUserRole)
+		return
+	}
 	_, mysqlErr := mysql.GetUserByEmail(req.Email)
 	if mysqlErr == nil {
 		log.Errorf("GetUserByEmail error: %v ", mysqlErr)
@@ -53,6 +59,7 @@ func (h *LoginHandler) SignUp(c *gin.Context) {
 		Email:    req.Email,
 		Password: req.Password,
 		Job:      req.Job,
+		Role:     req.Role,
 	}
 	userID, createErr := mysql.CreateUser(user)
 	if createErr != nil {

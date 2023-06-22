@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"errors"
+	"landd.co/landd/pkg/model"
 	"landd.co/landd/pkg/mysql"
 	"net/http"
 
@@ -17,6 +18,34 @@ func AuthRequired(c *gin.Context) {
 	user := session.Get(userKey)
 	if user == nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+	c.Next()
+}
+
+func RecruiterAuth(c *gin.Context) {
+	session := sessions.Default(c)
+	user := session.Get(userKey)
+	if user == nil {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+	if user.(mysql.User).Role != model.Recruiter {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "user unauthorized as recruiter"})
+		return
+	}
+	c.Next()
+}
+
+func PartnerAuth(c *gin.Context) {
+	session := sessions.Default(c)
+	user := session.Get(userKey)
+	if user == nil {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+	if user.(mysql.User).Role != model.Partner {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "user unauthorized as partner"})
 		return
 	}
 	c.Next()

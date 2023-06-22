@@ -23,6 +23,8 @@ var (
 		HttpCode: http.StatusBadRequest}
 	ErrCodePageSizeInvalid = CustomError{Code: 4007, Message: "ErrCodePageSizeInvalid",
 		HttpCode: http.StatusBadRequest}
+	ErrCodeInvalidUserRole = CustomError{Code: 4008, Message: "ErrCodeInvalidUserRole",
+		HttpCode: http.StatusBadRequest}
 
 	ErrCodeUnknownServerError = CustomError{Code: 5000, Message: "ErrCodeUnknownServerError",
 		HttpCode: http.StatusInternalServerError}

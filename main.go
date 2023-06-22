@@ -40,18 +40,29 @@ func registerRoutes(router *gin.Engine) {
 		profileRoutes := recruiterRoutes.Group("/profile")
 		{
 			recruiterHandler := handler.NewRecruiterProfileHandler()
-			profileRoutes.Use(middleware.AuthRequired).GET("/:user_id", recruiterHandler.GetProfileInfo)
-			profileRoutes.Use(middleware.AuthRequired).POST("/", recruiterHandler.UpdateProfileInfo)
-			profileRoutes.Use(middleware.AuthRequired).POST("/photo", recruiterHandler.UploadPhoto)
+			profileRoutes.Use(middleware.RecruiterAuth).GET("/:user_id", recruiterHandler.GetProfileInfo)
+			profileRoutes.Use(middleware.RecruiterAuth).POST("/", recruiterHandler.UpdateProfileInfo)
+			profileRoutes.Use(middleware.RecruiterAuth).POST("/photo", recruiterHandler.UploadPhoto)
 		}
 		endorseRoutes := recruiterRoutes.Group("/endorse")
 		{
 			endorseHandler := handler.NewEndorseHandler()
-			endorseRoutes.Use(middleware.AuthRequired).GET("/draft/:user_id", endorseHandler.GetDraft)
-			endorseRoutes.Use(middleware.AuthRequired).POST("/draft", endorseHandler.UpdateDraft)
-			endorseRoutes.Use(middleware.AuthRequired).GET("/:user_id", endorseHandler.Get)
-			endorseRoutes.Use(middleware.AuthRequired).GET("/:user_id/invite", endorseHandler.Invite)
-			endorseRoutes.Use(middleware.AuthRequired).POST("/", endorseHandler.Update)
+			endorseRoutes.Use(middleware.RecruiterAuth).GET("/draft/:user_id", endorseHandler.GetDraft)
+			endorseRoutes.Use(middleware.RecruiterAuth).POST("/draft", endorseHandler.UpdateDraft)
+			endorseRoutes.Use(middleware.RecruiterAuth).GET("/:user_id", endorseHandler.Get)
+			endorseRoutes.Use(middleware.RecruiterAuth).GET("/:user_id/invite", endorseHandler.Invite)
+			endorseRoutes.Use(middleware.RecruiterAuth).POST("/", endorseHandler.Update)
 		}
+	}
+
+	partnerRoutes := router.Group("/partner")
+	{
+		profileHandler := handler.NewPartnerProfileHandler()
+		partnerRoutes.Use(middleware.PartnerAuth).GET("/profile/:user_id", profileHandler.Get)
+		partnerRoutes.Use(middleware.PartnerAuth).POST("/profile", profileHandler.Update)
+
+		homepageHandler := handler.NewPartnerHomepageHandler()
+		partnerRoutes.Use(middleware.PartnerAuth).GET("/homepage/:user_id", homepageHandler.Get)
+		partnerRoutes.Use(middleware.PartnerAuth).POST("/homepage", homepageHandler.Update)
 	}
 }

@@ -24,3 +24,10 @@ const (
 	EndorserCandidate EndorserIdentity = 1
 	EndorserClient    EndorserIdentity = 2
 )
+
+type UserRole int
+
+const (
+	Recruiter UserRole = 1
+	Partner   UserRole = 2
+)

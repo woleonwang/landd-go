@@ -96,3 +96,21 @@ type UpdateEndorseDraftRequest struct {
 	Identity model.EndorserIdentity `json:"identity"`
 	Content  string                 `json:"content"`
 }
+
+type UpdatePartnerHomepageRequest struct {
+	UserID      int64                   `json:"user_id"`
+	Audience    string                  `json:"audience"`
+	DisplayName string                  `json:"display_name"`
+	Summary     string                  `json:"summary"`
+	CTPSummary  string                  `json:"ctp_summary"`
+	Reasons     []PartnerHomepageReason `json:"reasons"`
+	Companies   string                  `json:"companies"`
+	DataPolicy  string                  `json:"data_policy"`
+	Applicants  string                  `json:"applicants"`
+	HowTo       string                  `json:"howto"`
+}
+
+type PartnerHomepageReason struct {
+	Title  string `json:"title"`
+	Detail string `json:"detail"`
+}
