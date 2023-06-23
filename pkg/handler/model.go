@@ -114,3 +114,27 @@ type PartnerHomepageReason struct {
 	Title  string `json:"title"`
 	Detail string `json:"detail"`
 }
+
+type GetPartnerProfileResponse struct {
+	UserID   int64                 `json:"user_id"`
+	Profile  *mysql.PartnerProfile `json:"profile"`
+	Email    string                `json:"email"`
+	Contacts []*mysql.UserContact  `json:"contacts"`
+}
+
+type UpdatePartnerProfileRequest struct {
+	UserID    int64                        `json:"user_id"`
+	Name      string                       `json:"name"`
+	Photo     string                       `json:"photo"`
+	Company   string                       `json:"company"`
+	Contacts  map[model.ContactType]string `json:"contacts"`
+	Twitter   string                       `json:"twitter"`
+	LinkedIn  string                       `json:"linkedin"`
+	Website   string                       `json:"website"`
+	Blog      string                       `json:"blog"`
+	Facebook  string                       `json:"facebook"`
+	Instagram string                       `json:"instagram"`
+	Tiktok    string                       `json:"tiktok"`
+	Youtube   string                       `json:"youtube"`
+	Other     string                       `json:"other"`
+}

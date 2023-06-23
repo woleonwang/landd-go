@@ -27,3 +27,26 @@ func CreateUserContact(contacts []*UserContact) error {
 	}
 	return nil
 }
+
+func GetUserContacts(userID int64) ([]*UserContact, error) {
+	var contacts []*UserContact
+	err := GetDB().Where("user_id = ?", userID).Find(&contacts).Error
+	if err != nil {
+		return nil, err
+	}
+	return contacts, nil
+}
+
+func SaveUserContacts(userID int64, contacts []*UserContact) error {
+	if err := GetDB().Where("user_id = ?", userID).Delete(&UserContact{}).Error; err != nil {
+		log.Errorf("error deleting contacts: %v ", err)
+		return err
+	}
+	if len(contacts) > 0 {
+		if err := GetDB().Create(contacts).Error; err != nil {
+			log.Errorf("error creating contacts: %v ", err)
+			return err
+		}
+	}
+	return nil
+}
