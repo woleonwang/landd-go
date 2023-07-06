@@ -17,7 +17,7 @@ var (
 		HttpCode: http.StatusBadRequest}
 	ErrCodeIncorrectCredential = CustomError{Code: 4004, Message: "ErrCodeIncorrectCredential",
 		HttpCode: http.StatusBadRequest}
-	ErrCodeImageInvalid = CustomError{Code: 4005, Message: "ErrCodeImageInvalid",
+	ErrCodeFileInvalid = CustomError{Code: 4005, Message: "ErrCodeFileInvalid",
 		HttpCode: http.StatusBadRequest}
 	ErrCodeRequestUserNotLogin = CustomError{Code: 4006, Message: "ErrCodeRequestUserNotLogin",
 		HttpCode: http.StatusBadRequest}

@@ -18,7 +18,7 @@ func main() {
 	utils.Init()
 
 	router := gin.Default()
-	router.Static("/image", "./images")
+	router.Static("/file", "./files")
 	router.Use(requestid.New()).Use(logger.SetLogger()) // TODO add request id into log output for easy debugging
 	gob.Register(mysql.User{})
 	store := cookie.NewStore([]byte("coePCZ7yNeBtWyWtCTbTw6ZOszyL3nYf"))
@@ -34,6 +34,8 @@ func registerRoutes(router *gin.Engine) {
 	router.POST("/sign_up", loginHandler.SignUp)
 	router.POST("/login", loginHandler.Login)
 	router.Use(middleware.AuthRequired).GET("/logout", loginHandler.Logout)
+	fileHandler := handler.NewFileHandler()
+	router.Use(middleware.AuthRequired).POST("/file/upload", fileHandler.Upload)
 
 	recruiterRoutes := router.Group("/recruiter")
 	{
@@ -42,7 +44,6 @@ func registerRoutes(router *gin.Engine) {
 			recruiterHandler := handler.NewRecruiterProfileHandler()
 			profileRoutes.Use(middleware.RecruiterAuth).GET("/:user_id", recruiterHandler.GetProfileInfo)
 			profileRoutes.Use(middleware.RecruiterAuth).POST("/", recruiterHandler.UpdateProfileInfo)
-			profileRoutes.Use(middleware.RecruiterAuth).POST("/photo", recruiterHandler.UploadPhoto)
 		}
 		endorseRoutes := recruiterRoutes.Group("/endorse")
 		{

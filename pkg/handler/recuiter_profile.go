@@ -2,9 +2,7 @@ package handler
 
 import (
 	"errors"
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"landd.co/landd/pkg/middleware"
@@ -12,7 +10,6 @@ import (
 	"landd.co/landd/pkg/mysql"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -203,38 +200,6 @@ func (h *RecruiterProfileHandler) updatePublication(req UpdateProfileInfoRequest
 		pubs = append(pubs, pub)
 	}
 	return mysql.SaveRecruiterPublication(req.UserID, pubs)
-}
-
-type UploadPhotoResponse struct {
-	PhotoID string `json:"photo_id"`
-}
-
-func (h *RecruiterProfileHandler) UploadPhoto(c *gin.Context) {
-	// TODO save images to cloud storage
-	file, err := c.FormFile("image")
-	if err != nil {
-		log.Errorf("image upload error: %v ", err)
-		h.genErrResponse(c, model.ErrCodeImageInvalid)
-		return
-	}
-	filename := uuid.New().String()
-	filenameParts := strings.Split(file.Filename, ".")
-	if len(filenameParts) < 2 {
-		log.Errorf("file name invalid")
-		h.genErrResponse(c, model.ErrCodeImageInvalid)
-		return
-	}
-	image := fmt.Sprintf("%s.%s", filename, filenameParts[len(filenameParts)-1])
-
-	if err = c.SaveUploadedFile(file, fmt.Sprintf("./images/%s", image)); err != nil {
-		log.Errorf("image save error: %v ", err)
-		h.genErrResponse(c, model.ErrCodeImageUploadError)
-		return
-	}
-	resp := UploadPhotoResponse{
-		PhotoID: image,
-	}
-	c.JSON(http.StatusOK, gin.H{"message": resp})
 }
 
 func (h *RecruiterProfileHandler) genErrResponse(c *gin.Context, err model.CustomError) {
