@@ -3,6 +3,7 @@ package handler
 import (
 	"landd.co/landd/pkg/model"
 	"landd.co/landd/pkg/mysql"
+	"time"
 )
 
 type BaseResponse struct {
@@ -137,4 +138,91 @@ type UpdatePartnerProfileRequest struct {
 	Tiktok    string                       `json:"tiktok"`
 	Youtube   string                       `json:"youtube"`
 	Other     string                       `json:"other"`
+}
+
+type GetCTPCandidateResponse struct {
+	UserID     int64           `json:"user_id"`
+	Candidates []*CTPCandidate `json:"candidates"`
+}
+
+type CTPCandidate struct {
+	UserID      int64           `json:"user_id"`
+	CandidateID int64           `json:"candidate_id"`
+	Status      model.CTPStatus `json:"status"`
+	Vet         model.Vet       `json:"vet"`
+	FirstName   string          `json:"first_name"`
+	LastName    string          `json:"last_name"`
+	Mobile      string          `json:"mobile"`
+	Email       string          `json:"email"`
+	Expr        int             `json:"expr"`
+	LinkedIn    string          `json:"linkedin"`
+	Resume      []*CTPResume    `json:"resume"`
+	WorkExpr    []*CTPWorkExpr  `json:"work_expr"`
+	Education   []*CTPEducation `json:"education"`
+	Skill       string          `json:"skill"`
+	Tag         string          `json:"tag"`
+	Comment     string          `json:"comment"`
+	Note        string          `json:"note"`
+	CreatedAt   time.Time       `json:"created_at"`
+	UpdatedAt   time.Time       `json:"updated_at"`
+}
+
+type CTPResume struct {
+	FileName string `json:"file_name"`
+	FileID   string `json:"file_id"`
+}
+
+type CTPWorkExpr struct {
+	Company  string `json:"company"`
+	Title    string `json:"title"`
+	Function string `json:"function"`
+}
+
+type CTPEducation struct {
+	School string `json:"school"`
+	Degree string `json:"degree"`
+	Major  string `json:"major"`
+}
+
+type CreateCTPCandidateRequest struct {
+	UserID    int64           `json:"user_id"`
+	Vet       model.Vet       `json:"vet"`
+	FirstName string          `json:"first_name"`
+	LastName  string          `json:"last_name"`
+	Mobile    string          `json:"mobile"`
+	Email     string          `json:"email"`
+	Expr      int             `json:"expr"`
+	LinkedIn  string          `json:"linkedin"`
+	Resume    []*CTPResume    `json:"resume"`
+	WorkExpr  []*CTPWorkExpr  `json:"work_expr"`
+	Education []*CTPEducation `json:"education"`
+	Skill     string          `json:"skill"`
+	Tag       string          `json:"tag"`
+	Comment   string          `json:"comment"`
+	Note      string          `json:"note"`
+}
+
+type CreateCTPCandidateResponse struct {
+	UserID      int64 `json:"user_id"`
+	CandidateID int64 `json:"candidate_id"`
+}
+
+type UpdateCTPCandidateRequest struct {
+	UserID      int64           `json:"user_id"`
+	CandidateID int64           `json:"candidate_id"`
+	Status      model.CTPStatus `json:"status"`
+	Vet         model.Vet       `json:"vet"`
+	FirstName   string          `json:"first_name"`
+	LastName    string          `json:"last_name"`
+	Mobile      string          `json:"mobile"`
+	Email       string          `json:"email"`
+	Expr        int             `json:"expr"`
+	LinkedIn    string          `json:"linkedin"`
+	Resume      []*CTPResume    `json:"resume"`
+	WorkExpr    []*CTPWorkExpr  `json:"work_expr"`
+	Education   []*CTPEducation `json:"education"`
+	Skill       string          `json:"skill"`
+	Tag         string          `json:"tag"`
+	Comment     string          `json:"comment"`
+	Note        string          `json:"note"`
 }

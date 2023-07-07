@@ -65,5 +65,10 @@ func registerRoutes(router *gin.Engine) {
 		homepageHandler := handler.NewPartnerHomepageHandler()
 		partnerRoutes.Use(middleware.PartnerAuth).GET("/homepage/:user_id", homepageHandler.Get)
 		partnerRoutes.Use(middleware.PartnerAuth).POST("/homepage", homepageHandler.Update)
+
+		ctpHandler := handler.NewPartnerCTPHandler()
+		partnerRoutes.Use(middleware.PartnerAuth).GET("/ctp/:user_id", ctpHandler.Get)
+		partnerRoutes.Use(middleware.PartnerAuth).POST("/ctp/new", ctpHandler.Create)
+		partnerRoutes.Use(middleware.PartnerAuth).POST("/ctp", ctpHandler.Update)
 	}
 }

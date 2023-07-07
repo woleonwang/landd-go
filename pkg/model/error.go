@@ -26,7 +26,7 @@ var (
 	ErrCodeInvalidUserRole = CustomError{Code: 4008, Message: "ErrCodeInvalidUserRole",
 		HttpCode: http.StatusBadRequest}
 
-	ErrCodeUnknownServerError = CustomError{Code: 5000, Message: "ErrCodeUnknownServerError",
+	ErrCodeInternalServerError = CustomError{Code: 5000, Message: "ErrCodeInternalServerError",
 		HttpCode: http.StatusInternalServerError}
 	ErrCodeMysqlError = CustomError{Code: 5001, Message: "ErrCodeMysqlError",
 		HttpCode: http.StatusInternalServerError}

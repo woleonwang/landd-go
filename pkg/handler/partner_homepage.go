@@ -85,7 +85,7 @@ func (h *PartnerHomepageHandler) Update(c *gin.Context) {
 		reasons, err := json.Marshal(req.Reasons)
 		if err != nil {
 			log.Errorf("UpdatePartnerHomepage marshal reasons error:%v", err)
-			h.genErrResponse(c, model.ErrCodeUnknownServerError)
+			h.genErrResponse(c, model.ErrCodeInternalServerError)
 			return
 		}
 		updates.Reasons = string(reasons)

@@ -31,3 +31,22 @@ const (
 	Recruiter UserRole = 1
 	Partner   UserRole = 2
 )
+
+type CTPStatus int
+
+const (
+	CTPStatusPending  CTPStatus = 1
+	CTPStatusApproved CTPStatus = 2
+	CTPStatusDeclined CTPStatus = 3
+)
+
+type Vet string
+
+const (
+	VetExColleague Vet = "colleague"
+	VetFriend      Vet = "friend"
+	VetSpoken      Vet = "spoken"
+	VetRecommended Vet = "recommended"
+	VetNone        Vet = "none"
+	VetOther       Vet = "other"
+)
