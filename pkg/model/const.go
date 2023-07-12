@@ -30,6 +30,7 @@ type UserRole int
 const (
 	Recruiter UserRole = 1
 	Partner   UserRole = 2
+	Admin     UserRole = 3
 )
 
 type CTPStatus int
