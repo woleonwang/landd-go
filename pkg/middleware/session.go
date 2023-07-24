@@ -23,11 +23,29 @@ func AuthRequired(c *gin.Context) {
 	c.Next()
 }
 
+func AdminAuth(c *gin.Context) {
+	session := sessions.Default(c)
+	user := session.Get(userKey)
+	if user == nil {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+	if user.(mysql.User).Role != model.Admin {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "user unauthorized as admin"})
+		return
+	}
+	c.Next()
+}
+
 func RecruiterAuth(c *gin.Context) {
 	session := sessions.Default(c)
 	user := session.Get(userKey)
 	if user == nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+	if user.(mysql.User).Role == model.Admin {
+		c.Next()
 		return
 	}
 	if user.(mysql.User).Role != model.Recruiter {
@@ -42,6 +60,10 @@ func PartnerAuth(c *gin.Context) {
 	user := session.Get(userKey)
 	if user == nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+	if user.(mysql.User).Role == model.Admin {
+		c.Next()
 		return
 	}
 	if user.(mysql.User).Role != model.Partner {

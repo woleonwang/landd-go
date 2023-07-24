@@ -2,15 +2,16 @@ package handler
 
 import (
 	"errors"
+	"net/http"
+	"strconv"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"landd.co/landd/pkg/middleware"
 	"landd.co/landd/pkg/model"
 	"landd.co/landd/pkg/mysql"
-	"net/http"
-	"strconv"
-	"time"
 )
 
 type RecruiterProfileHandler struct {
@@ -154,7 +155,7 @@ func (h *RecruiterProfileHandler) updatePlacement(req UpdateProfileInfoRequest) 
 			UserID:   req.UserID,
 			Date:     time.Unix(p.Date, 0),
 			Position: p.Position,
-			Company:  p.Position,
+			Company:  p.Company,
 			Verified: p.Verified,
 		}
 		mysqlPlacements = append(mysqlPlacements, placement)

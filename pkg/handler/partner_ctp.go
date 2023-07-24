@@ -27,7 +27,7 @@ func (h *PartnerCTPHandler) Get(c *gin.Context) {
 		return
 	}
 	user := middleware.GetUser(c)
-	if user.UserID != userID {
+	if user.Role != model.Admin && user.UserID != userID {
 		h.genErrResponse(c, model.ErrCodeRequestUserNotLogin)
 		return
 	}

@@ -226,3 +226,35 @@ type UpdateCTPCandidateRequest struct {
 	Comment     string          `json:"comment"`
 	Note        string          `json:"note"`
 }
+
+type GetJobsResponse struct {
+	Jobs []*mysql.Job `json:"jobs"`
+}
+
+type CreateJobRequest struct {
+	Title         string `json:"title"`
+	Company       string `json:"company"`
+	Jd            string `json:"jd"`
+	AboutCompany  string `json:"about_company"`
+	Comment       string `json:"comment"`
+	ReferralFee   int    `json:"referral_fee"`
+	LowerBoundSal int    `json:"lower_bound_sal"`
+	UpperBoundSal int    `json:"upper_bound_sal"`
+	PosterID      int64  `json:"poster_id"`
+}
+
+type CreateJobResponse struct {
+	JobID int64 `json:"job_id"`
+}
+
+type UpdateJobRequest struct {
+	JobID         int64  `json:"job_id"`
+	Title         string `json:"title"`
+	Company       string `json:"company"`
+	Jd            string `json:"jd"`
+	AboutCompany  string `json:"about_company"`
+	Comment       string `json:"comment"`
+	ReferralFee   int    `json:"referral_fee"`
+	LowerBoundSal int    `json:"lower_bound_sal"`
+	UpperBoundSal int    `json:"upper_bound_sal"`
+}
