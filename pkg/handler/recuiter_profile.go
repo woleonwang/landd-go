@@ -70,7 +70,7 @@ func (h *RecruiterProfileHandler) GetProfileInfo(c *gin.Context) {
 		return
 	}
 	resp := GetProfileInfoResponse{
-		UserID:       userID,
+		UserID:       strconv.FormatInt(userID, 10),
 		Profile:      profile,
 		Placements:   placements,
 		Jobs:         jobs,

@@ -49,7 +49,7 @@ func (h *PartnerProfileHandler) Get(c *gin.Context) {
 		return
 	}
 	resp := GetPartnerProfileResponse{
-		UserID:   userID,
+		UserID:   strconv.FormatInt(userID, 10),
 		Profile:  profile,
 		Email:    user.Email,
 		Contacts: contacts,

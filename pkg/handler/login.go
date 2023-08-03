@@ -9,6 +9,7 @@ import (
 	"landd.co/landd/pkg/model"
 	"landd.co/landd/pkg/mysql"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -88,7 +89,7 @@ func (h *LoginHandler) SignUp(c *gin.Context) {
 	}
 	log.Infof("user created with id: %v", userID)
 	resp := LoginResponse{
-		UserID:   userID,
+		UserID:   strconv.FormatInt(userID, 10),
 		UserName: req.Name,
 	}
 	c.JSON(http.StatusOK, gin.H{"message": resp})
@@ -100,7 +101,7 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	UserID   int64  `json:"user_id"`
+	UserID   string `json:"user_id"`
 	UserName string `json:"username"`
 }
 
@@ -133,7 +134,7 @@ func (h *LoginHandler) Login(c *gin.Context) {
 		return
 	}
 	resp := LoginResponse{
-		UserID:   user.UserID,
+		UserID:   strconv.FormatInt(user.UserID, 10),
 		UserName: user.Name,
 	}
 	c.JSON(http.StatusOK, gin.H{"message": resp})
