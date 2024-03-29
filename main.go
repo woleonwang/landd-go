@@ -30,20 +30,13 @@ func main() {
 }
 
 func registerRoutes(router *gin.Engine) {
-	loginHandler := handler.NewLoginHandler()
-	router.POST("/sign_up", loginHandler.SignUp)
-	router.POST("/login", loginHandler.Login)
-	router.Use(middleware.AuthRequired).GET("/logout", loginHandler.Logout)
-	fileHandler := handler.NewFileHandler()
-	router.Use(middleware.AuthRequired).POST("/file/upload", fileHandler.Upload)
-
 	recruiterRoutes := router.Group("/recruiter")
 	{
-		profileRoutes := recruiterRoutes.Group("/profile").Use(middleware.RecruiterAuth)
+		profileRoutes := recruiterRoutes.Group("/profile")
 		{
 			recruiterHandler := handler.NewRecruiterProfileHandler()
 			profileRoutes.GET("/:user_id", recruiterHandler.GetProfileInfo)
-			profileRoutes.POST("/", recruiterHandler.UpdateProfileInfo)
+			profileRoutes.Use(middleware.RecruiterAuth).POST("/", recruiterHandler.UpdateProfileInfo)
 		}
 		endorseRoutes := recruiterRoutes.Group("/endorse")
 		{
@@ -56,27 +49,34 @@ func registerRoutes(router *gin.Engine) {
 		}
 	}
 
-	partnerRoutes := router.Group("/partner").Use(middleware.PartnerAuth)
+	partnerRoutes := router.Group("/partner")
 	{
 		profileHandler := handler.NewPartnerProfileHandler()
-		partnerRoutes.GET("/profile/:user_id", profileHandler.Get)
-		partnerRoutes.POST("/profile", profileHandler.Update)
+		partnerRoutes.Use(middleware.PartnerAuth).GET("/profile/:user_id", profileHandler.Get)
+		partnerRoutes.Use(middleware.PartnerAuth).POST("/profile", profileHandler.Update)
 
 		homepageHandler := handler.NewPartnerHomepageHandler()
-		partnerRoutes.GET("/homepage/:user_id", homepageHandler.Get)
-		partnerRoutes.POST("/homepage", homepageHandler.Update)
+		partnerRoutes.Use(middleware.PartnerAuth).GET("/homepage/:user_id", homepageHandler.Get)
+		partnerRoutes.Use(middleware.PartnerAuth).POST("/homepage", homepageHandler.Update)
 
 		ctpHandler := handler.NewPartnerCTPHandler()
-		partnerRoutes.GET("/ctp/:user_id", ctpHandler.Get)
-		partnerRoutes.POST("/ctp/new", ctpHandler.Create)
-		partnerRoutes.POST("/ctp", ctpHandler.Update)
+		partnerRoutes.Use(middleware.PartnerAuth).GET("/ctp/:user_id", ctpHandler.Get)
+		partnerRoutes.Use(middleware.PartnerAuth).POST("/ctp/new", ctpHandler.Create)
+		partnerRoutes.Use(middleware.PartnerAuth).POST("/ctp", ctpHandler.Update)
 	}
 
-	adminRoutes := router.Group("/admin").Use(middleware.AdminAuth)
+	adminRoutes := router.Group("/admin")
 	{
 		jobHandler := handler.NewJobHandler()
-		adminRoutes.GET("/jobs", jobHandler.Get)
-		adminRoutes.POST("/jobs/new", jobHandler.Create)
-		adminRoutes.POST("/jobs", jobHandler.Update)
+		adminRoutes.Use(middleware.AdminAuth).GET("/jobs", jobHandler.Get)
+		adminRoutes.Use(middleware.AdminAuth).POST("/jobs/new", jobHandler.Create)
+		adminRoutes.Use(middleware.AdminAuth).POST("/jobs", jobHandler.Update)
 	}
+
+	loginHandler := handler.NewLoginHandler()
+	router.POST("/sign_up", loginHandler.SignUp)
+	router.POST("/login", loginHandler.Login)
+	router.Use(middleware.AuthRequired).GET("/logout", loginHandler.Logout)
+	fileHandler := handler.NewFileHandler()
+	router.Use(middleware.AuthRequired).POST("/file/upload", fileHandler.Upload)
 }
