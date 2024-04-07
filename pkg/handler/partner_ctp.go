@@ -52,7 +52,7 @@ func (h *PartnerCTPHandler) Get(c *gin.Context) {
 			return
 		}
 		resp := GetCTPCandidateResponse{
-			UserID:     userID,
+			UserID:     strconv.FormatInt(userID, 10),
 			Candidates: candidates,
 		}
 		c.JSON(http.StatusOK, gin.H{"message": resp})
@@ -89,7 +89,7 @@ func (h *PartnerCTPHandler) Get(c *gin.Context) {
 		return
 	}
 	resp := GetCTPCandidateResponse{
-		UserID:     userID,
+		UserID:     strconv.FormatInt(userID, 10),
 		Candidates: converted,
 	}
 	c.JSON(http.StatusOK, gin.H{"message": resp})
@@ -152,8 +152,8 @@ func (h *PartnerCTPHandler) Create(c *gin.Context) {
 		return
 	}
 	resp := CreateCTPCandidateResponse{
-		UserID:      user.UserID,
-		CandidateID: candidateID,
+		UserID:      strconv.FormatInt(user.UserID, 10),
+		CandidateID: strconv.FormatInt(candidateID, 10),
 	}
 	c.JSON(http.StatusOK, gin.H{"message": resp})
 }
@@ -232,8 +232,8 @@ func (h *PartnerCTPHandler) convertCandidates(candidates []*mysql.PartnerCandida
 	var res []*CTPCandidate
 	for _, c := range candidates {
 		can := &CTPCandidate{
-			UserID:      c.UserID,
-			CandidateID: c.CandidateID,
+			UserID:      strconv.FormatInt(c.UserID, 10),
+			CandidateID: strconv.FormatInt(c.CandidateID, 10),
 			Status:      c.Status,
 			Vet:         c.Vet,
 			FirstName:   c.FirstName,

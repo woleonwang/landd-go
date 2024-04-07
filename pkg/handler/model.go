@@ -12,7 +12,7 @@ type BaseResponse struct {
 }
 
 type GetProfileInfoResponse struct {
-	UserID       int64                         `json:"user_id"`
+	UserID       string                        `json:"user_id"`
 	Profile      *mysql.RecruiterProfile       `json:"profile"`
 	Placements   []*mysql.RecruiterPlacement   `json:"placements"`
 	Jobs         []*mysql.RecruiterJob         `json:"jobs"`
@@ -65,12 +65,12 @@ type PublicationChanges struct {
 }
 
 type InviteEndorseResponse struct {
-	UserID   int64 `json:"user_id"`
-	InviteID int64 `json:"invite_id"`
+	UserID   string `json:"user_id"`
+	InviteID string `json:"invite_id"`
 }
 
 type CreateEndorsementRequest struct {
-	UserID int64 `json:"user_id"`
+	UserID string `json:"user_id"`
 }
 
 type UpdateEndorsementRequest struct {
@@ -85,7 +85,7 @@ type UpdateEndorsementRequest struct {
 }
 
 type GetEndorsementResponse struct {
-	UserID       int64                `json:"user_id"`
+	UserID       string               `json:"user_id"`
 	Endorsements []*mysql.Endorsement `json:"endorsements"`
 }
 
@@ -117,7 +117,7 @@ type PartnerHomepageReason struct {
 }
 
 type GetPartnerProfileResponse struct {
-	UserID   int64                 `json:"user_id"`
+	UserID   string                `json:"user_id"`
 	Profile  *mysql.PartnerProfile `json:"profile"`
 	Email    string                `json:"email"`
 	Contacts []*mysql.UserContact  `json:"contacts"`
@@ -141,13 +141,13 @@ type UpdatePartnerProfileRequest struct {
 }
 
 type GetCTPCandidateResponse struct {
-	UserID     int64           `json:"user_id"`
+	UserID     string          `json:"user_id"`
 	Candidates []*CTPCandidate `json:"candidates"`
 }
 
 type CTPCandidate struct {
-	UserID      int64           `json:"user_id"`
-	CandidateID int64           `json:"candidate_id"`
+	UserID      string          `json:"user_id"`
+	CandidateID string          `json:"candidate_id"`
 	Status      model.CTPStatus `json:"status"`
 	Vet         model.Vet       `json:"vet"`
 	FirstName   string          `json:"first_name"`
@@ -203,8 +203,8 @@ type CreateCTPCandidateRequest struct {
 }
 
 type CreateCTPCandidateResponse struct {
-	UserID      int64 `json:"user_id"`
-	CandidateID int64 `json:"candidate_id"`
+	UserID      string `json:"user_id"`
+	CandidateID string `json:"candidate_id"`
 }
 
 type UpdateCTPCandidateRequest struct {
@@ -244,7 +244,7 @@ type CreateJobRequest struct {
 }
 
 type CreateJobResponse struct {
-	JobID int64 `json:"job_id"`
+	JobID string `json:"job_id"`
 }
 
 type UpdateJobRequest struct {

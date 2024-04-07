@@ -82,7 +82,7 @@ func (h *JobHandler) Create(c *gin.Context) {
 		return
 	}
 	resp := CreateJobResponse{
-		JobID: jobID,
+		JobID: strconv.FormatInt(jobID, 10),
 	}
 	c.JSON(http.StatusOK, gin.H{"message": resp})
 }

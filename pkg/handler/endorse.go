@@ -61,7 +61,7 @@ func (h *EndorseHandler) Get(c *gin.Context) {
 		return
 	}
 	resp := GetEndorsementResponse{
-		UserID:       user.UserID,
+		UserID:       strconv.FormatInt(user.UserID, 10),
 		Endorsements: endorsements,
 	}
 	c.JSON(http.StatusOK, gin.H{"message": resp})
@@ -79,7 +79,7 @@ func (h *EndorseHandler) GetByInviteID(c *gin.Context, userID, inviteID int64) {
 		return
 	}
 	resp := GetEndorsementResponse{
-		UserID:       userID,
+		UserID:       strconv.FormatInt(userID, 10),
 		Endorsements: []*mysql.Endorsement{endorsement},
 	}
 	c.JSON(http.StatusOK, gin.H{"message": resp})
@@ -114,8 +114,8 @@ func (h *EndorseHandler) Invite(c *gin.Context) {
 		return
 	}
 	resp := InviteEndorseResponse{
-		UserID:   user.UserID,
-		InviteID: inviteID,
+		UserID:   strconv.FormatInt(user.UserID, 10),
+		InviteID: strconv.FormatInt(inviteID, 10),
 	}
 	c.JSON(http.StatusOK, gin.H{"message": resp})
 }

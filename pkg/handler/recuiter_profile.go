@@ -29,11 +29,6 @@ func (h *RecruiterProfileHandler) GetProfileInfo(c *gin.Context) {
 		h.genErrResponse(c, model.ErrCodeInvalidRequest)
 		return
 	}
-	user := middleware.GetUser(c)
-	if user.UserID != userID {
-		h.genErrResponse(c, model.ErrCodeRequestUserNotLogin)
-		return
-	}
 	profile, err1 := mysql.GetRecruiterProfile(userID)
 	if err1 != nil {
 		if errors.Is(err1, gorm.ErrRecordNotFound) {
@@ -70,7 +65,7 @@ func (h *RecruiterProfileHandler) GetProfileInfo(c *gin.Context) {
 		return
 	}
 	resp := GetProfileInfoResponse{
-		UserID:       userID,
+		UserID:       strconv.FormatInt(userID, 10),
 		Profile:      profile,
 		Placements:   placements,
 		Jobs:         jobs,
