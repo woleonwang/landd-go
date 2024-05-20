@@ -83,42 +83,48 @@ func (h *RecruiterProfileHandler) UpdateProfileInfo(c *gin.Context) {
 		return
 	}
 	log.Infof("UpdateProfileInfo request: %v ", req)
+	userID, err := strconv.ParseInt(req.UserID, 10, 64)
+	if err != nil {
+		log.Errorf("convert userID error: %v ", err)
+		h.genErrResponse(c, model.ErrCodeInvalidRequest)
+		return
+	}
 	user := middleware.GetUser(c)
-	if user.UserID != req.UserID {
+	if user.UserID != userID {
 		log.Errorf("UpdateProfileInfo requested user not logged in")
 		h.genErrResponse(c, model.ErrCodeRequestUserNotLogin)
 		return
 	}
 	if req.ProfileChanges != nil {
-		if err := h.updateProfile(req); err != nil {
+		if err := h.updateProfile(req, userID); err != nil {
 			log.Errorf("updateProfile err:%v", err)
 			h.genErrResponse(c, model.ErrCodeMysqlError)
 			return
 		}
 	}
 	if req.PlacementChanges != nil {
-		if err := h.updatePlacement(req); err != nil {
+		if err := h.updatePlacement(req, userID); err != nil {
 			log.Errorf("updatePlacement err:%v", err)
 			h.genErrResponse(c, model.ErrCodeMysqlError)
 			return
 		}
 	}
 	if req.JobChanges != nil {
-		if err := h.updateJob(req); err != nil {
+		if err := h.updateJob(req, userID); err != nil {
 			log.Errorf("updateJob err:%v", err)
 			h.genErrResponse(c, model.ErrCodeMysqlError)
 			return
 		}
 	}
 	if req.CandidateChanges != nil {
-		if err := h.updateCandidate(req); err != nil {
+		if err := h.updateCandidate(req, userID); err != nil {
 			log.Errorf("updateCandidate err:%v", err)
 			h.genErrResponse(c, model.ErrCodeMysqlError)
 			return
 		}
 	}
 	if req.PublicationChanges != nil {
-		if err := h.updatePublication(req); err != nil {
+		if err := h.updatePublication(req, userID); err != nil {
 			log.Errorf("updatePublication err:%v", err)
 			h.genErrResponse(c, model.ErrCodeMysqlError)
 			return
@@ -127,9 +133,9 @@ func (h *RecruiterProfileHandler) UpdateProfileInfo(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "profile updated"})
 }
 
-func (h *RecruiterProfileHandler) updateProfile(req UpdateProfileInfoRequest) error {
+func (h *RecruiterProfileHandler) updateProfile(req UpdateProfileInfoRequest, userID int64) error {
 	updates := &mysql.RecruiterProfile{
-		UserID:                req.UserID,
+		UserID:                userID,
 		Name:                  req.ProfileChanges.Name,
 		Photo:                 req.ProfileChanges.Photo,
 		Summary:               req.ProfileChanges.Summary,
@@ -140,14 +146,14 @@ func (h *RecruiterProfileHandler) updateProfile(req UpdateProfileInfoRequest) er
 		TotalPlacedSalary:     req.ProfileChanges.TotalPlacedSalary,
 		TotalCandidates:       req.ProfileChanges.TotalCandidates,
 	}
-	return mysql.UpdateRecruiterProfile(req.UserID, updates)
+	return mysql.UpdateRecruiterProfile(userID, updates)
 }
 
-func (h *RecruiterProfileHandler) updatePlacement(req UpdateProfileInfoRequest) error {
+func (h *RecruiterProfileHandler) updatePlacement(req UpdateProfileInfoRequest, userID int64) error {
 	var mysqlPlacements []*mysql.RecruiterPlacement
 	for _, p := range req.PlacementChanges {
 		placement := &mysql.RecruiterPlacement{
-			UserID:   req.UserID,
+			UserID:   userID,
 			Date:     time.Unix(p.Date, 0),
 			Position: p.Position,
 			Company:  p.Company,
@@ -155,47 +161,47 @@ func (h *RecruiterProfileHandler) updatePlacement(req UpdateProfileInfoRequest) 
 		}
 		mysqlPlacements = append(mysqlPlacements, placement)
 	}
-	return mysql.SaveRecruiterPlacements(req.UserID, mysqlPlacements)
+	return mysql.SaveRecruiterPlacements(userID, mysqlPlacements)
 }
 
-func (h *RecruiterProfileHandler) updateJob(req UpdateProfileInfoRequest) error {
+func (h *RecruiterProfileHandler) updateJob(req UpdateProfileInfoRequest, userID int64) error {
 	var jobs []*mysql.RecruiterJob
 	for _, j := range req.JobChanges {
 		job := &mysql.RecruiterJob{
-			UserID:      req.UserID,
+			UserID:      userID,
 			Title:       j.Title,
 			Company:     j.Company,
 			Description: j.Description,
 		}
 		jobs = append(jobs, job)
 	}
-	return mysql.SaveRecruiterJobs(req.UserID, jobs)
+	return mysql.SaveRecruiterJobs(userID, jobs)
 }
 
-func (h *RecruiterProfileHandler) updateCandidate(req UpdateProfileInfoRequest) error {
+func (h *RecruiterProfileHandler) updateCandidate(req UpdateProfileInfoRequest, userID int64) error {
 	var candidates []*mysql.RecruiterCandidate
 	for _, c := range req.CandidateChanges {
 		candidate := &mysql.RecruiterCandidate{
-			UserID:     req.UserID,
+			UserID:     userID,
 			Title:      c.Title,
 			Percentage: c.Percentage,
 		}
 		candidates = append(candidates, candidate)
 	}
-	return mysql.SaveRecruiterCandidates(req.UserID, candidates)
+	return mysql.SaveRecruiterCandidates(userID, candidates)
 }
 
-func (h *RecruiterProfileHandler) updatePublication(req UpdateProfileInfoRequest) error {
+func (h *RecruiterProfileHandler) updatePublication(req UpdateProfileInfoRequest, userID int64) error {
 	var pubs []*mysql.RecruiterPublication
 	for _, p := range req.PublicationChanges {
 		pub := &mysql.RecruiterPublication{
-			UserID: req.UserID,
+			UserID: userID,
 			Title:  p.Title,
 			Link:   p.Link,
 		}
 		pubs = append(pubs, pub)
 	}
-	return mysql.SaveRecruiterPublication(req.UserID, pubs)
+	return mysql.SaveRecruiterPublication(userID, pubs)
 }
 
 func (h *RecruiterProfileHandler) genErrResponse(c *gin.Context, err model.CustomError) {

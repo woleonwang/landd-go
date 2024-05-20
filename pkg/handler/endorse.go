@@ -128,15 +128,27 @@ func (h *EndorseHandler) Update(c *gin.Context) {
 		return
 	}
 	log.Infof("Update request: %v ", req)
+	userID, err := strconv.ParseInt(req.UserID, 10, 64)
+	if err != nil {
+		log.Errorf("convert userID error: %v ", err)
+		h.genErrResponse(c, model.ErrCodeInvalidRequest)
+		return
+	}
 	user := middleware.GetUser(c)
-	if user.UserID != req.UserID {
+	if user.UserID != userID {
 		log.Errorf("Operate requested user not logged in")
 		h.genErrResponse(c, model.ErrCodeRequestUserNotLogin)
 		return
 	}
+	inviteID, err := strconv.ParseInt(req.InviteID, 10, 64)
+	if err != nil {
+		log.Errorf("convert inviteID error: %v ", err)
+		h.genErrResponse(c, model.ErrCodeInvalidRequest)
+		return
+	}
 	updates := &mysql.Endorsement{
-		InviteID:     req.InviteID,
-		UserID:       req.UserID,
+		InviteID:     inviteID,
+		UserID:       userID,
 		EndorserName: req.Endorser,
 		Title:        req.Title,
 		Company:      req.Company,
@@ -144,7 +156,7 @@ func (h *EndorseHandler) Update(c *gin.Context) {
 		Status:       req.Status,
 		Content:      req.Content,
 	}
-	if err := mysql.UpdateEndorsement(req.UserID, req.InviteID, updates); err != nil {
+	if err := mysql.UpdateEndorsement(userID, inviteID, updates); err != nil {
 		log.Errorf("UpdateEndorsement error: %v ", err)
 		h.genErrResponse(c, model.ErrCodeMysqlError)
 		return

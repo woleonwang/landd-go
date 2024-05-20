@@ -21,7 +21,7 @@ type GetProfileInfoResponse struct {
 }
 
 type UpdateProfileInfoRequest struct {
-	UserID             int64                 `json:"user_id"`
+	UserID             string                `json:"user_id"`
 	ProfileChanges     *ProfileChanges       `json:"profile"`
 	PlacementChanges   []*PlacementChanges   `json:"placements"`
 	JobChanges         []*JobChanges         `json:"jobs"`
@@ -74,8 +74,8 @@ type CreateEndorsementRequest struct {
 }
 
 type UpdateEndorsementRequest struct {
-	UserID   int64                   `json:"user_id"`
-	InviteID int64                   `json:"invite_id"`
+	UserID   string                  `json:"user_id"`
+	InviteID string                  `json:"invite_id"`
 	Endorser string                  `json:"endorser"`
 	Title    string                  `json:"title"`
 	Company  string                  `json:"company"`
